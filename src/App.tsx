@@ -9,6 +9,8 @@ import SubmitComplaint from "@/pages/SubmitComplaint";
 import MyComplaints from "@/pages/MyComplaints";
 import Analytics from "@/pages/Analytics";
 import SettingsPage from "@/pages/SettingsPage";
+import AdminDashboard from "@/pages/AdminDashboard";
+import DepartmentPanel from "@/pages/DepartmentPanel";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +28,8 @@ const App = () => (
             <Route path="/complaints" element={<MyComplaints />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/department" element={<DepartmentPanel />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
