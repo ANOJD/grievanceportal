@@ -5,6 +5,8 @@ import {
   BarChart3,
   Settings,
   Shield,
+  ShieldCheck,
+  Building2,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -13,18 +15,24 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const navItems = [
+const userNav = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Submit Complaint", url: "/submit", icon: PenSquare },
   { title: "My Complaints", url: "/complaints", icon: FileText },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "Settings", url: "/settings", icon: Settings },
+];
+
+const adminNav = [
+  { title: "Admin Dashboard", url: "/admin", icon: ShieldCheck },
+  { title: "Department Panel", url: "/department", icon: Building2 },
 ];
 
 export function AppSidebar() {
