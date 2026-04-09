@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "@/contexts/AuthContext";
 import {
   Sidebar,
   SidebarContent,
@@ -23,22 +24,23 @@ import {
 } from "@/components/ui/sidebar";
 
 const userNav = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Submit Complaint", url: "/submit", icon: PenSquare },
-  { title: "My Complaints", url: "/complaints", icon: FileText },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Settings", url: "/settings", icon: Settings },
+  { titleKey: "navDashboard", url: "/", icon: LayoutDashboard },
+  { titleKey: "navSubmit", url: "/submit", icon: PenSquare },
+  { titleKey: "navComplaints", url: "/complaints", icon: FileText },
+  { titleKey: "navAnalytics", url: "/analytics", icon: BarChart3 },
+  { titleKey: "navSettings", url: "/settings", icon: Settings },
 ];
 
 const adminNav = [
-  { title: "Admin Dashboard", url: "/admin", icon: ShieldCheck },
-  { title: "Department Panel", url: "/department", icon: Building2 },
+  { titleKey: "navAdmin", url: "/admin", icon: ShieldCheck },
+  { titleKey: "navDepartment", url: "/department", icon: Building2 },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const t = useTranslation();
 
   return (
     <Sidebar collapsible="icon">
@@ -51,18 +53,18 @@ export function AppSidebar() {
                 GrievanceAI
               </h1>
               <p className="text-[10px] text-sidebar-muted tracking-wide uppercase">
-                Public Service Portal
+                {t("sidebarPortal")}
               </p>
             </div>
           )}
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "User"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{!collapsed && t("sectionUser")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {userNav.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey}>
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
@@ -71,7 +73,7 @@ export function AppSidebar() {
                       activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
                     >
                       <item.icon className="mr-2 h-4 w-4 shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && <span>{t(item.titleKey)}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -81,11 +83,11 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Administration"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{!collapsed && t("sectionAdmin")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {adminNav.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey}>
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
@@ -93,7 +95,7 @@ export function AppSidebar() {
                       activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
                     >
                       <item.icon className="mr-2 h-4 w-4 shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && <span>{t(item.titleKey)}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

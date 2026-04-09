@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth, type Language } from "@/contexts/AuthContext";
+import { useAuth, useTranslation, type Language } from "@/contexts/AuthContext";
 
 const languages: { code: Language; label: string; flag: string }[] = [
   { code: "en", label: "English", flag: "🇬🇧" },
@@ -19,6 +19,7 @@ const languages: { code: Language; label: string; flag: string }[] = [
 
 export function TopBar() {
   const { user, language, setLanguage, logout } = useAuth();
+  const t = useTranslation();
   const currentLang = languages.find((l) => l.code === language) || languages[0];
 
   return (
@@ -63,12 +64,12 @@ export function TopBar() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem disabled className="text-xs text-muted-foreground">
-              Role: {user?.role === "department" ? "Officer" : user?.role}
+              {t("roleLabel")}: {user?.role === "department" ? t("department") : user?.role === "admin" ? t("admin") : t("user")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout} className="text-destructive">
               <LogOut className="h-4 w-4 mr-2" />
-              Logout
+              {t("logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

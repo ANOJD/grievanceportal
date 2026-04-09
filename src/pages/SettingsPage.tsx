@@ -3,33 +3,38 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useAuth, useTranslation } from "@/contexts/AuthContext";
+import type { Language } from "@/lib/translations";
 
 export default function SettingsPage() {
+  const t = useTranslation();
+  const { language, setLanguage } = useAuth();
+
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-sm text-muted-foreground">Manage your account and preferences</p>
+        <h1 className="text-2xl font-bold">{t("settingsTitle")}</h1>
+        <p className="text-sm text-muted-foreground">{t("settingsSub")}</p>
       </div>
 
       <div className="rounded-lg border border-border bg-card p-5 space-y-4">
-        <h2 className="text-sm font-semibold">Profile</h2>
+        <h2 className="text-sm font-semibold">{t("profile")}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label>Full Name</Label>
+            <Label>{t("fullName")}</Label>
             <Input defaultValue="Rajesh Kumar" />
           </div>
           <div className="space-y-2">
-            <Label>Email</Label>
+            <Label>{t("email")}</Label>
             <Input defaultValue="rajesh@example.com" />
           </div>
           <div className="space-y-2">
-            <Label>Phone</Label>
+            <Label>{t("phone")}</Label>
             <Input defaultValue="+91 98765 43210" />
           </div>
           <div className="space-y-2">
-            <Label>Preferred Language</Label>
-            <Select defaultValue="en">
+            <Label>{t("preferredLanguage")}</Label>
+            <Select value={language} onValueChange={(v) => setLanguage(v as Language)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="en">English</SelectItem>
@@ -43,12 +48,12 @@ export default function SettingsPage() {
       </div>
 
       <div className="rounded-lg border border-border bg-card p-5 space-y-4">
-        <h2 className="text-sm font-semibold">Notifications</h2>
+        <h2 className="text-sm font-semibold">{t("notifications")}</h2>
         <div className="space-y-3">
           {[
-            ["Email notifications", "Receive updates via email"],
-            ["Push notifications", "Browser push for status changes"],
-            ["SMS alerts", "Critical updates via SMS"],
+            [t("emailNotifications"), t("emailNotificationsSub")],
+            [t("pushNotifications"), t("pushNotificationsSub")],
+            [t("smsAlerts"), t("smsAlertsSub")],
           ].map(([title, desc]) => (
             <div key={title} className="flex items-center justify-between">
               <div>
@@ -61,7 +66,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <Button>Save Changes</Button>
+      <Button>{t("saveChanges")}</Button>
     </div>
   );
 }
