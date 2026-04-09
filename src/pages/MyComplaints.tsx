@@ -7,8 +7,9 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { AlertTriangle, X } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { categoryLabels, categoryIcons } from "@/lib/data";
+import { useTranslation } from "@/contexts/AuthContext";
 
 type TabFilter = "all" | "active" | "resolved" | "escalated";
 
@@ -22,6 +23,7 @@ const filterFn: Record<TabFilter, (s: Status) => boolean> = {
 export default function MyComplaints() {
   const [tab, setTab] = useState<TabFilter>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const t = useTranslation();
 
   const filtered = sampleComplaints.filter((c) => filterFn[tab](c.status));
   const selected = sampleComplaints.find((c) => c.id === selectedId);
@@ -29,22 +31,22 @@ export default function MyComplaints() {
   return (
     <div className="max-w-5xl space-y-5">
       <div>
-        <h1 className="text-2xl font-bold">My Complaints</h1>
-        <p className="text-sm text-muted-foreground">Track and manage your submitted complaints</p>
+        <h1 className="text-2xl font-bold">{t("myComplaintsTitle")}</h1>
+        <p className="text-sm text-muted-foreground">{t("myComplaintsSub")}</p>
       </div>
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as TabFilter)}>
         <TabsList>
-          <TabsTrigger value="all">All ({sampleComplaints.length})</TabsTrigger>
-          <TabsTrigger value="active">Active</TabsTrigger>
-          <TabsTrigger value="resolved">Resolved</TabsTrigger>
-          <TabsTrigger value="escalated">Escalated</TabsTrigger>
+          <TabsTrigger value="all">{t("all")} ({sampleComplaints.length})</TabsTrigger>
+          <TabsTrigger value="active">{t("active")}</TabsTrigger>
+          <TabsTrigger value="resolved">{t("resolved")}</TabsTrigger>
+          <TabsTrigger value="escalated">{t("escalated")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value={tab} className="mt-4 space-y-3">
           {filtered.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              <p className="text-sm">No complaints in this category</p>
+              <p className="text-sm">{t("noComplaints")}</p>
             </div>
           ) : (
             filtered.map((c) => (
@@ -72,19 +74,19 @@ export default function MyComplaints() {
 
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <p className="text-xs text-muted-foreground">Category</p>
+                <p className="text-xs text-muted-foreground">{t("categoryLabel")}</p>
                 <p className="font-medium">{categoryIcons[selected.category]} {categoryLabels[selected.category]}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Department</p>
+                <p className="text-xs text-muted-foreground">{t("departmentLabel")}</p>
                 <p className="font-medium">{selected.department}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Location</p>
+                <p className="text-xs text-muted-foreground">{t("locationLabel")}</p>
                 <p className="font-medium">{selected.location}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">AI Confidence</p>
+                <p className="text-xs text-muted-foreground">{t("aiConfidence")}</p>
                 <p className="font-medium">{Math.round(selected.confidence * 100)}%</p>
               </div>
             </div>
@@ -96,13 +98,13 @@ export default function MyComplaints() {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold mb-3">Progress Timeline</h4>
+              <h4 className="text-sm font-semibold mb-3">{t("progressTimeline")}</h4>
               <ComplaintTimeline events={selected.timeline} />
             </div>
 
             {selected.status !== "resolved" && (
               <Button variant="destructive" size="sm" className="gap-1.5">
-                <AlertTriangle className="h-3.5 w-3.5" /> Raise Escalation
+                <AlertTriangle className="h-3.5 w-3.5" /> {t("raiseEscalation")}
               </Button>
             )}
           </DialogContent>
