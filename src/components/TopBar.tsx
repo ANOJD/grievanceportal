@@ -1,21 +1,26 @@
-import { Bell, Globe, User } from "lucide-react";
+import { Bell, Globe, User, LogOut } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth, type Language } from "@/contexts/AuthContext";
 
-const languages = [
-  { code: "en", label: "English" },
-  { code: "hi", label: "हिन्दी" },
-  { code: "kn", label: "ಕನ್ನಡ" },
-  { code: "ta", label: "தமிழ்" },
+const languages: { code: Language; label: string; flag: string }[] = [
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "hi", label: "हिन्दी", flag: "🇮🇳" },
+  { code: "kn", label: "ಕನ್ನಡ", flag: "🇮🇳" },
+  { code: "ta", label: "தமிழ்", flag: "🇮🇳" },
 ];
 
 export function TopBar() {
+  const { user, language, setLanguage, logout } = useAuth();
+  const currentLang = languages.find((l) => l.code === language) || languages[0];
+
   return (
     <header className="h-14 flex items-center justify-between border-b border-border bg-card px-4 shrink-0">
       <div className="flex items-center gap-2">
@@ -27,12 +32,19 @@ export function TopBar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
               <Globe className="h-4 w-4" />
-              <span className="hidden sm:inline text-xs">EN</span>
+              <span className="hidden sm:inline text-xs">{currentLang.flag} {currentLang.label}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {languages.map((lang) => (
-              <DropdownMenuItem key={lang.code}>{lang.label}</DropdownMenuItem>
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => setLanguage(lang.code)}
+                className={language === lang.code ? "bg-accent" : ""}
+              >
+                <span className="mr-2">{lang.flag}</span>
+                {lang.label}
+              </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -42,9 +54,24 @@ export function TopBar() {
           <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-critical animate-pulse-dot" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
-          <User className="h-4 w-4" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
+              <User className="h-4 w-4" />
+              <span className="hidden sm:inline text-xs font-medium capitalize">{user?.name}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem disabled className="text-xs text-muted-foreground">
+              Role: {user?.role === "department" ? "Officer" : user?.role}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={logout} className="text-destructive">
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
